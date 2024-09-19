@@ -13,9 +13,3 @@ output "internal_ip_VM" {
 output "public_ip_VM" {
   value = [yandex_compute_instance.my-vm.network_interface.0.nat_ip_address]
 }
-
-
-#output "LB" {
-#  value = [yandex_lb_network_load_balancer.default.external_address_spec.0.address]
-#}
-
