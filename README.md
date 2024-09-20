@@ -86,27 +86,36 @@ Yandex Cloud/Kubernetes/Linux/Terraform/Prometheus/Grafana
    kubectl apply -f grafana.yaml
    ```
 6. Подключитесь к Grafana:
-   - узнайте внешний IP-адрес сетевого балансировщика:
+ - узнайте внешний IP-адрес сетевого балансировщика:
    ```bash
    yc load-balancer network-load-balancer list --folder-name <имя папки YC, в которой создан проект k8s>
    yc load-balancer network-load-balancer get --id <идентификатор балансировщика, полученный командой выше>
    ```
-   - выполните вход в Grafana:
+ - выполните вход в Grafana:
    ```bash
    URL — http://<внешний IP-адрес балансировщика>:3000
    Логин и пароль: admin
    ```
-8. Добавьте источник данных с типом Prometheus и следующими настройками:
+8. Добавьте источник данных с типом Prometheus и необходимыми настройками. Для этого:
+ - получите список всех созданных подов:
+   ```bash
+   kubectl get pods
+   ```
+ - узнайте внутренний IP-адрес пода с сервером Prometheus:
+   ```bash
+   kubectl describe pods/my-prom-prometheus-server
+   ```
+ - добавьте источник:
    ```bash
    Name — Prometheus.
-   URL — http://<внутренний IP адрес пода Prometheus>:9090
+   URL — http://<внутренний IP-адрес пода сервера Prometheus>:9090
    ```
-9. Импортируйте дашборды:
+10. Импортируйте дашборды:
    - Kubernetes cluster monitoring (via Prometheus), содержащий метрики кластера Kubernetes. Укажите идентификатор дашборда (315) при импорте.
    - Kubernetes Nodes, содержащий основные метрики нод Kubernetes и виртуальной машины. Укажите идентификатор дашборда (8171) при импорте.
 
-10. Откройте дашборды и убедитесь, что Grafana получает метрики от кластера Kubernetes, от нод кластера и виртуальной машины.
-11. Для удаления созданных ресурсов используйте:
+11. Откройте дашборды и убедитесь, что Grafana получает метрики от кластера Kubernetes, от нод кластера и виртуальной машины.
+12. Для удаления созданных ресурсов используйте:
     ```bash
     terraform destroy
     ```
