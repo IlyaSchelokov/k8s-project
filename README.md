@@ -42,10 +42,10 @@ Yandex Cloud/Kubernetes/Linux/Terraform/Prometheus/Grafana
 
     | Название | Описание |
     | ----------- | ----------- |
-    | `internal_ip_k8s` | Внутренний IP адрес кластера k8s
-    | `public_ip_k8s` | Публичный IP адрес кластера k8s
-    | `internal_ip_VM` | Внутренний IP адрес виртуальной машины
-    | `public_ip_VM` | Публичный IP адрес кластера виртуальной машины
+    | `internal_ip_k8s` | Внутренний IP-адрес кластера k8s
+    | `public_ip_k8s` | Публичный IP-адрес кластера k8s
+    | `internal_ip_VM` | Внутренний IP-адрес виртуальной машины
+    | `public_ip_VM` | Публичный IP-адрес кластера виртуальной машины
 
     </details>
 
@@ -79,28 +79,34 @@ Yandex Cloud/Kubernetes/Linux/Terraform/Prometheus/Grafana
     - job_name: my-vm
       metrics_path: /metrics
       static_configs:
-        - targets: ["<внутренний IP ВМ>:9100"]
+        - targets: ["<внутренний IP-адрес ВМ>:9100"]
     ```
 5. Установите Grafana
    ```bash
    kubectl apply -f grafana.yaml
    ```
-6. Выполните вход в Grafana:
+6. Подключитесь к Grafana:
+   - узнайте внешний IP-адрес сетевого балансировщика:
    ```bash
-   URL — http://<IP адрес listener-а балансировщика>:3000
-   Логин и пароль admin
+   yc load-balancer network-load-balancer list --folder-name <имя папки YC, в которой создан проект k8s>
+   yc load-balancer network-load-balancer get --id <идентификатор балансировщика, полученный командой выше>
    ```
-7. Добавьте источник данных с типом Prometheus и следующими настройками:
+   - выполните вход в Grafana:
+   ```bash
+   URL — http://<внешний IP-адрес балансировщика>:3000
+   Логин и пароль: admin
+   ```
+8. Добавьте источник данных с типом Prometheus и следующими настройками:
    ```bash
    Name — Prometheus.
    URL — http://<внутренний IP адрес пода Prometheus>:9090
    ```
-8. Импортируйте дашборды:
+9. Импортируйте дашборды:
    - Kubernetes cluster monitoring (via Prometheus), содержащий метрики кластера Kubernetes. Укажите идентификатор дашборда (315) при импорте.
    - Kubernetes Nodes, содержащий основные метрики нод Kubernetes и виртуальной машины. Укажите идентификатор дашборда (8171) при импорте.
 
-9. Откройте дашборды и убедитесь, что Grafana получает метрики от кластера Kubernetes, от нод кластера и виртуальной машины.
-10. Для удаления созданных ресурсов используйте:
+10. Откройте дашборды и убедитесь, что Grafana получает метрики от кластера Kubernetes, от нод кластера и виртуальной машины.
+11. Для удаления созданных ресурсов используйте:
     ```bash
     terraform destroy
     ```
