@@ -103,7 +103,7 @@ Yandex Cloud/Kubernetes/Linux/Terraform/Prometheus/Grafana
    ```
  - узнайте внутренний IP-адрес пода с сервером Prometheus:
    ```bash
-   kubectl describe pods/my-prom-prometheus-server
+   kubectl describe pods/<имя пода с сервером Prometheus>
    ```
  - добавьте источник:
    ```bash
