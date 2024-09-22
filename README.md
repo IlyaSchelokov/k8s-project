@@ -89,6 +89,8 @@ Yandex Cloud/Kubernetes/Linux/Terraform/Prometheus/Grafana
  - узнайте внешний IP-адрес сетевого балансировщика:
    ```bash
    yc load-balancer network-load-balancer list --folder-name <имя папки YC, в которой создан проект k8s>
+   ```
+   ```bash
    yc load-balancer network-load-balancer get --id <идентификатор балансировщика, полученный командой выше>
    ```
  - выполните вход в Grafana:
