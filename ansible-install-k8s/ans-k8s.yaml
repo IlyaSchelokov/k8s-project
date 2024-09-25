@@ -1,0 +1,12 @@
+---
+### плейбук пока в работе###
+- hosts: all
+  become: true
+  roles:
+    - kube-prerequisites
+    - containerd
+    - kubelet-kubeadm-kubectl
+    - init-cluster
+    - prometheus
+    - grafana
+
