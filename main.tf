@@ -176,18 +176,54 @@ resource "yandex_compute_instance" "node-4" {
   }
 }
 
+resource "yandex_compute_instance" "vm" {
+  # Создание виртуальной машины.
+  name                      = "vm"
+  platform_id               = "standard-v1"
+  zone                      = "ru-central1-a"
+  allow_stopping_for_update = true
+  folder_id                 = yandex_resourcemanager_folder.myfolder.id
+  resources {
+    cores         = 2
+    memory        = 2 # GB
+    core_fraction = 20
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = "fd8d75k8a0dldkad633n" # Образ the Ubuntu 22.04.
+    }
+  }
+
+  network_interface {
+    nat                = true # Создание внешнего IP ВМ.
+    subnet_id          = yandex_vpc_subnet.mysubnet.id
+    security_group_ids = [yandex_vpc_security_group.sec-group.id]
+  }
+
+  metadata = {
+    user-data = "${file("./cloud-config.yaml")}"
+  }
+
+  labels = {
+    "template-label1" = "vm"
+  }
+}
+
 # Создание ansible inventory
 resource "local_file" "ansible_inventory" {
   depends_on = [
     yandex_compute_instance.master-1,
     yandex_compute_instance.node-3,
-    yandex_compute_instance.node-4
+    yandex_compute_instance.node-4,
+    yandex_compute_instance.vm
   ]
   content = templatefile("./hosts.ini",
     {
       master-1 = yandex_compute_instance.master-1.network_interface.0.nat_ip_address
       node-3   = yandex_compute_instance.node-3.network_interface.0.nat_ip_address
       node-4   = yandex_compute_instance.node-4.network_interface.0.nat_ip_address
+      vm       = yandex_compute_instance.vm.network_interface.0.nat_ip_address
   })
   filename = "./ansible-install-k8s/inventory.ini"
 }
