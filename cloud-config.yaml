@@ -5,5 +5,5 @@ users:
     shell: /bin/bash
     sudo: 'ALL=(ALL) NOPASSWD:ALL'
     ssh_authorized_keys:
-      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIPyyKZEyngn/dmcNLbQ6KRLpEHKXmkNz0hLPafZ1QER ilya@acer
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINZFQBwKGskqRLLilN3Mw35mc6wLM3FcAkUGCFOH+UN9 ilya@acer
 
