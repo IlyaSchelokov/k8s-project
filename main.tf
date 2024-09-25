@@ -1,7 +1,7 @@
 resource "yandex_resourcemanager_folder" "myfolder" {
   # Создание в облаке YC папки для размещения ресурсов.
-  cloud_id    =  local.cloud_id
-  name        = "tomat"
+  cloud_id    = local.cloud_id
+  name        = "tomatos"
   description = "myfolder"
 }
 
@@ -74,9 +74,9 @@ resource "yandex_vpc_security_group" "sec-group" {
   }
 }
 
-resource "yandex_compute_instance" "master" {
-  # Создание k8s-master.
-  name                      = "master"
+resource "yandex_compute_instance" "master-1" {
+  # Создание k8s-master-1.
+  name                      = "master-1"
   platform_id               = "standard-v1"
   zone                      = "ru-central1-a"
   allow_stopping_for_update = true
@@ -104,13 +104,13 @@ resource "yandex_compute_instance" "master" {
   }
 
   labels = {
-    "template-label1" = "master"
+    "template-label1" = "master-1"
   }
 }
 
-resource "yandex_compute_instance" "node-1" {
+resource "yandex_compute_instance" "node-3" {
   # Создание первой ноды.
-  name                      = "node-1"
+  name                      = "node-3"
   platform_id               = "standard-v1"
   zone                      = "ru-central1-a"
   allow_stopping_for_update = true
@@ -138,13 +138,13 @@ resource "yandex_compute_instance" "node-1" {
   }
 
   labels = {
-    "template-label1" = "node-1"
+    "template-label1" = "node-3"
   }
 }
 
-resource "yandex_compute_instance" "node-2" {
+resource "yandex_compute_instance" "node-4" {
   # Создание второй ноды.
-  name                      = "node-2"
+  name                      = "node-4"
   platform_id               = "standard-v1"
   zone                      = "ru-central1-a"
   allow_stopping_for_update = true
@@ -172,22 +172,22 @@ resource "yandex_compute_instance" "node-2" {
   }
 
   labels = {
-    "template-label1" = "node-2"
+    "template-label1" = "node-4"
   }
 }
 
 # Создание ansible inventory
 resource "local_file" "ansible_inventory" {
   depends_on = [
-    yandex_compute_instance.master,
-    yandex_compute_instance.node-1,
-    yandex_compute_instance.node-2
+    yandex_compute_instance.master-1,
+    yandex_compute_instance.node-3,
+    yandex_compute_instance.node-4
   ]
   content = templatefile("./hosts.ini",
     {
-      master = yandex_compute_instance.master.network_interface.0.nat_ip_address
-      node-1   = yandex_compute_instance.node-1.network_interface.0.nat_ip_address
-      node-2   = yandex_compute_instance.node-2.network_interface.0.nat_ip_address
+      master-1 = yandex_compute_instance.master-1.network_interface.0.nat_ip_address
+      node-3   = yandex_compute_instance.node-3.network_interface.0.nat_ip_address
+      node-4   = yandex_compute_instance.node-4.network_interface.0.nat_ip_address
   })
   filename = "./ansible-install-k8s/inventory.ini"
 }
@@ -198,7 +198,7 @@ resource "terraform_data" "execute-playbook" {
 
     connection {
       type        = "ssh"
-      host        = yandex_compute_instance.master.network_interface.0.nat_ip_address
+      host        = yandex_compute_instance.master-1.network_interface.0.nat_ip_address
       user        = "ilya"
       agent       = false
       private_key = file(var.private_key)
@@ -209,7 +209,8 @@ resource "terraform_data" "execute-playbook" {
     local_file.ansible_inventory
   ]
 
-  provisioner "local-exec" {
-    command = "ansible-playbook -i ./ansible-install-k8s/inventory.ini --private-key ${var.private_key} ./ansible-install-k8s/ans-k8s.yaml"
-  }
+  ### пока в работе ###
+  #  provisioner "local-exec" {
+  #    command = "ansible-playbook -i ./ansible-install-k8s/inventory.ini --private-key ${var.private_key} ./ansible-install-k8s/ans-k8s.yaml"
+  #  }
 }
