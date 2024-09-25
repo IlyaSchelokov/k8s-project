@@ -7,6 +7,6 @@
     - containerd
     - kubelet-kubeadm-kubectl
     - init-cluster
-    - prometheus
-    - grafana
+    - prometheus-grafana
+    - node-exporter
 
