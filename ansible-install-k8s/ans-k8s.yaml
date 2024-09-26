@@ -1,12 +1,26 @@
 ---
-### плейбук пока в работе###
-- hosts: all
+- name: k8s
+  hosts: master, workers
   become: true
+  gather_facts: yes
   roles:
     - kube-prerequisites
     - containerd
     - kubelet-kubeadm-kubectl
     - init-cluster
-    - prometheus-grafana
+
+- name: Install Observability stack (targets)
+  hosts: master, workers, vm
+  become: true
+  gather_facts: yes
+  roles:    
     - node-exporter
+    
+- name: Install Observability stack (observer)
+  hosts: master
+  become: true
+  roles:
+    - prometheus-grafana
+
+
 
