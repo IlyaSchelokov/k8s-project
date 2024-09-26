@@ -65,6 +65,12 @@ resource "yandex_vpc_security_group" "sec-group" {
     v4_cidr_blocks = ["0.0.0.0/0"]
     port           = 22
   }
+  ingress {
+    protocol       = "TCP"
+    description    = "Правило разрешает входящий трафик на 3000 port."
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 3000
+  }
   egress {
     protocol       = "ANY"
     description    = "Правило разрешает весь исходящий трафик. Узлы могут связаться с Yandex Container Registry, Yandex Object Storage, Docker Hub и т. д."
@@ -72,6 +78,15 @@ resource "yandex_vpc_security_group" "sec-group" {
     from_port      = 0
     to_port        = 65535
   }
+}
+
+resource "yandex_compute_disk" "disk-master-1" {
+  name      = "disk-master-1"
+  type      = "network-ssd"
+  zone      = "ru-central1-a"
+  size      = "12"
+  image_id  = "fd8d75k8a0dldkad633n"
+  folder_id = yandex_resourcemanager_folder.myfolder.id
 }
 
 resource "yandex_compute_instance" "master-1" {
@@ -88,9 +103,7 @@ resource "yandex_compute_instance" "master-1" {
   }
 
   boot_disk {
-    initialize_params {
-      image_id = "fd8d75k8a0dldkad633n" # Образ the Ubuntu 22.04.
-    }
+    disk_id = yandex_compute_disk.disk-master-1.id
   }
 
   network_interface {
@@ -108,6 +121,15 @@ resource "yandex_compute_instance" "master-1" {
   }
 }
 
+resource "yandex_compute_disk" "disk-node-3" {
+  name      = "disk-node-3"
+  type      = "network-ssd"
+  zone      = "ru-central1-a"
+  size      = "12"
+  image_id  = "fd8d75k8a0dldkad633n"
+  folder_id = yandex_resourcemanager_folder.myfolder.id
+}
+
 resource "yandex_compute_instance" "node-3" {
   # Создание первой ноды.
   name                      = "node-3"
@@ -122,9 +144,7 @@ resource "yandex_compute_instance" "node-3" {
   }
 
   boot_disk {
-    initialize_params {
-      image_id = "fd8d75k8a0dldkad633n" # Образ the Ubuntu 22.04.
-    }
+    disk_id = yandex_compute_disk.disk-node-3.id
   }
 
   network_interface {
@@ -142,6 +162,15 @@ resource "yandex_compute_instance" "node-3" {
   }
 }
 
+resource "yandex_compute_disk" "disk-node-4" {
+  name      = "disk-node-4"
+  type      = "network-ssd"
+  zone      = "ru-central1-a"
+  size      = "12"
+  image_id  = "fd8d75k8a0dldkad633n"
+  folder_id = yandex_resourcemanager_folder.myfolder.id
+}
+
 resource "yandex_compute_instance" "node-4" {
   # Создание второй ноды.
   name                      = "node-4"
@@ -156,9 +185,7 @@ resource "yandex_compute_instance" "node-4" {
   }
 
   boot_disk {
-    initialize_params {
-      image_id = "fd8d75k8a0dldkad633n" # Образ the Ubuntu 22.04.
-    }
+    disk_id = yandex_compute_disk.disk-node-4.id
   }
 
   network_interface {
@@ -176,6 +203,15 @@ resource "yandex_compute_instance" "node-4" {
   }
 }
 
+resource "yandex_compute_disk" "disk-vm" {
+  name      = "disk-vm"
+  type      = "network-ssd"
+  zone      = "ru-central1-a"
+  size      = "12"
+  image_id  = "fd8d75k8a0dldkad633n"
+  folder_id = yandex_resourcemanager_folder.myfolder.id
+}
+
 resource "yandex_compute_instance" "vm" {
   # Создание виртуальной машины.
   name                      = "vm"
@@ -190,9 +226,7 @@ resource "yandex_compute_instance" "vm" {
   }
 
   boot_disk {
-    initialize_params {
-      image_id = "fd8d75k8a0dldkad633n" # Образ the Ubuntu 22.04.
-    }
+    disk_id = yandex_compute_disk.disk-vm.id
   }
 
   network_interface {
