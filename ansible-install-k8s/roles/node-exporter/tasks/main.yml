@@ -1,4 +1,57 @@
 ---
+- name: Update repositories cache and install packages
+  apt:
+    pkg:
+    - ca-certificates
+    - curl
+    - gnupg
+    - lsb-release
+    - apt-transport-https
+    state: latest
+    update_cache: yes
+
+- name: install pip3
+  become: true
+  apt:
+    name: python3-pip
+    state: present
+
+- name: install pre-requisites for python
+  pip:
+    name:
+      - docker
+
+- name: create keyrings directory
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: 0755
+
+- name: Add Docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+
+- name: Add Docker APT repository
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/{{ ansible_system | lower }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
+
+- name: install docker
+  become: true
+  apt:
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  loop:
+    - docker-ce
+    - docker-ce-cli
+  
+- name: check docker is active
+  systemd:
+    state: restarted
+    name: docker
+    enabled: yes
+    daemon-reload: yes
+
 - name: Create NodeExporter
   docker_container:
     name: node-exporter
@@ -14,3 +67,7 @@
       --path.sysfs=/host/sys
       --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)
     published_ports: "9100:9100"
+    
+- name: Display IP address of eth0 interface
+  debug:
+    var: ansible_eth0.ipv4.address
