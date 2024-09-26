@@ -4,14 +4,13 @@
 - развернуть стек мониторинга в созданном Kubernetes кластере и настроить сбор/хранение/отображение основных метрик кластера и виртуальной машины
 
 ## Стек:
-Yandex Cloud/Kubernetes/Linux/Terraform/Prometheus/Grafana
+Yandex Cloud/Kubernetes/Linux/Terraform/Prometheus/Grafana/Ansible/Docker
 
 ## Начальные параметры:
 - создан аккаунт в Yandex Cloud
-- на рабочую машину установлены: Terraform, kubectl, Helm, Yandex Cloud (CLI)
-- заранее созданы конфигурационные файлы grafana.yaml и cloud-config.yaml
+- на рабочую машину установлены: Terraform, Ansible
+- заранее создан cloud-config.yaml
 - получен OAuth токен аккаунта в Yandex Cloud
-- настроен профиль в Yandex Cloud (CLI)
 
 ## Развертывание Terraform сценария
 1. Склонируйте репозиторий `IlyaSchelokov/k8s-project` из GitHub и перейдите в папку сценария `k8s-project`:
@@ -48,73 +47,6 @@ Yandex Cloud/Kubernetes/Linux/Terraform/Prometheus/Grafana
     | `public_ip_VM` | Публичный IP-адрес кластера виртуальной машины
 
     </details>
-
-## Действия после развертывания сценария
-1. Чтобы получить учетные данные для подключения к публичному IP-адресу кластера через Интернет, выполните команду:
-    ```bash
-    yc managed-kubernetes cluster get-credentials <имя_или_идентификатор_кластера> --external
-    ```
-2. Установите Prometheus
-   ```bash
-   helm install my-prom prometheus-community/prometheus
-   ```
-3. Для отправки метрик из виртуальной машины в Grafana подключитесь к ВМ, используя публичный IP ВМ, установите и запустите на ВМ node_exporter: 
-   ```bash
-   wget https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.linux-amd64.tar.gz
-   ```
-   ```bash
-   tar xvfz node_exporter-1.8.2.linux-amd64.tar.gz
-   ```   
-   ```bash
-   cd node_exporter-1.8.2.linux-amd64
-   ```   
-   ```bash
-   ./node_exporter
-   ```
-4. Добавьте в конфигурационный файл prometheus.yml данные для сбора метрик с виртуальной машины:
-   ```bash
-   KUBE_EDITOR="nano -c" kubectl edit configmap my-prom-prometheus-server -n default
-   ```
-    ```bash
-    - job_name: my-vm
-      metrics_path: /metrics
-      static_configs:
-        - targets: ["<внутренний IP-адрес ВМ>:9100"]
-    ```
-5. Установите Grafana
-   ```bash
-   kubectl apply -f grafana.yaml
-   ```
-6. Подключитесь к Grafana:
- - узнайте внешний IP-адрес сетевого балансировщика:
-   ```bash
-   yc load-balancer network-load-balancer list --folder-name <имя папки YC, в которой создан проект k8s>
-   ```
-   ```bash
-   yc load-balancer network-load-balancer get --id <идентификатор балансировщика, полученный командой выше>
-   ```
- - выполните вход в Grafana:
-   ```bash
-   URL — http://<внешний IP-адрес балансировщика>:3000
-   Логин и пароль: admin
-   ```
-8. Добавьте источник данных с типом Prometheus и необходимыми настройками. Для этого:
- - получите список всех созданных подов:
-   ```bash
-   kubectl get pods
-   ```
- - узнайте внутренний IP-адрес пода с сервером Prometheus:
-   ```bash
-   kubectl describe pods/<имя пода с сервером Prometheus>
-   ```
- - добавьте источник:
-   ```bash
-   Name — Prometheus.
-   URL — http://<внутренний IP-адрес пода сервера Prometheus>:9090
-   ```
-10. Импортируйте дашборды:
-   - Kubernetes cluster monitoring (via Prometheus), содержащий метрики кластера Kubernetes. Укажите идентификатор дашборда (315) при импорте.
-   - Kubernetes Nodes, содержащий основные метрики нод Kubernetes и виртуальной машины. Укажите идентификатор дашборда (8171) при импорте.
 
 11. Откройте дашборды и убедитесь, что Grafana получает метрики от кластера Kubernetes, от нод кластера и виртуальной машины.
 12. Для удаления созданных ресурсов используйте:
