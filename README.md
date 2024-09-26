@@ -41,7 +41,7 @@ Yandex Cloud/Kubernetes/Linux/Terraform/Prometheus/Grafana/Ansible/Docker
 
     | Название | Описание |
     | ----------- | ----------- |
-    | `public_ip_k8s-master` | Публичный IP-адрес кластера виртуальной машины
+    | `public_ip_k8s-master` | Публичный IP-адрес k8s-master
 
     </details>
 
