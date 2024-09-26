@@ -53,11 +53,14 @@
     register: bridge_net
   - debug: msg={{bridge_net.stdout_lines}}
 
+  - name: fix to fail "dpkg was interrupted"
+    shell: dpkg --configure -a
+
   - name: update apt packages
     become: true
     apt:
-      upgrade: yes
-      update_cache: yes
+      upgrade: no
+      update_cache: false
  
   - name: install pip3
     become: true
@@ -71,3 +74,4 @@
         - openshift
         - pyyaml
         - kubernetes
+        - docker
