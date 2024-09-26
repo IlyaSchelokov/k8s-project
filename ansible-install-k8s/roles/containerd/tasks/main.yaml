@@ -31,8 +31,9 @@
     update_cache: yes
 
 - name: Apply the default configuration for the containerd
+  become: true
   shell: | 
-    sudo containerd config default | sudo tee /etc/containerd/config.toml
+    containerd config default | sudo tee /etc/containerd/config.toml
 
 - name: replace line
   lineinfile: 
