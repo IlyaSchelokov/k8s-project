@@ -310,7 +310,13 @@ resource "terraform_data" "execute-playbook" {
   depends_on = [
     local_file.ansible_inventory
   ]
+  
+provisioner "local-exec" {
+command = "ansible-playbook -i ./ansible-install-k8s/inventory.ini --private-key ${var.private_key} ./ansible-install-k8s/ans-k8s.yaml"
+}
+}
 
+<<<<<<< HEAD
   provisioner "local-exec" {
     command = "ansible-playbook -i ./ansible-install-k8s/inventory.ini --private-key ${var.private_key} ./ansible-install-k8s/ans-k8s.yaml"
   }
@@ -318,4 +324,8 @@ resource "terraform_data" "execute-playbook" {
 
 output "public_ip_k8s-master" {
   value = [yandex_compute_instance.master.network_interface.0.nat_ip_address]
+=======
+output "public_ip_k8s-master" {
+  value = [yandex_compute_instance.master-1.network_interface.0.nat_ip_address]
+>>>>>>> bebb1ea1177d83a6497f5eef0c5cf1da75001170
 }

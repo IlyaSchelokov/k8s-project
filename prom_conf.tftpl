@@ -10,4 +10,8 @@ scrape_configs:
   - job_name: node-exporter
     scrape_interval: 30s
     static_configs:
+<<<<<<< HEAD:prom_conf.tftpl
     - targets: ["${master}:9100", "${node1}:9100", "${node2}:9100", "${vm}:9100"]
+=======
+    - targets: ["192.168.10.26:9100", "192.168.10.7:9100", "192.168.10.30:9100", "192.168.10.8:9100"]
+>>>>>>> bebb1ea1177d83a6497f5eef0c5cf1da75001170:ansible-install-k8s/roles/prometheus-grafana/files/prometheus_main.yml
