@@ -8,7 +8,7 @@
     - lsb-release
     - apt-transport-https
     state: latest
-    update_cache: yes
+    update_cache: true
 
 - name: create keyrings directory
   file:
@@ -31,9 +31,8 @@
     update_cache: yes
 
 - name: Apply the default configuration for the containerd
-  become: true
   shell: | 
-    containerd config default | sudo tee /etc/containerd/config.toml
+    sudo containerd config default | sudo tee /etc/containerd/config.toml
 
 - name: replace line
   lineinfile: 

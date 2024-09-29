@@ -67,7 +67,3 @@
       --path.sysfs=/host/sys
       --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)
     published_ports: "9100:9100"
-    
-- name: Display IP address of eth0 interface
-  debug:
-    var: ansible_eth0.ipv4.address

@@ -59,8 +59,8 @@
   - name: update apt packages
     become: true
     apt:
-      upgrade: no
-      update_cache: false
+      upgrade: "yes"
+      update_cache: true
  
   - name: install pip3
     become: true
