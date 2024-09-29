@@ -1,0 +1,8 @@
+---
+- name: save join token to workers
+  copy: 
+    src: "{{ playbook_dir }}/buffer/join.sh"
+    dest: "./"
+    
+- name: execute join token
+  command: sh join.sh
