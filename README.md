@@ -8,9 +8,14 @@ Yandex Cloud/Kubernetes/Linux/Terraform/Prometheus/Grafana/Ansible/Docker
 
 ## Начальные параметры:
 - создан аккаунт в Yandex Cloud
-- на рабочую машину установлены: Terraform, Ansible
 - заранее создан cloud-config.yaml
 - получен OAuth токен аккаунта в Yandex Cloud
+- на рабочую машину установлены: Terraform, Ansible
+- на рабочую машину установлены коллекции Ansible:
+  - community.general
+  - kubernetes.core
+  - community.kubernetes
+  - cloud.common
 
 ## Развертывание Terraform сценария
 1. Склонируйте репозиторий `IlyaSchelokov/k8s-project` из GitHub и перейдите в папку сценария `k8s-project`:
