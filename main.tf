@@ -1,19 +1,19 @@
 resource "yandex_resourcemanager_folder" "myfolder" {
   # Создание в облаке YC папки для размещения ресурсов.
   cloud_id    = local.cloud_id
-  name        = var.folder_name
+  name        = "${var.folder_name}"
   description = "myfolder"
 }
 
 resource "yandex_vpc_network" "mynet" {
   # Создание внутренней сети кластера и его компонентов.
-  name      = var.net_name
+  name      = "${var.net_name}"
   folder_id = yandex_resourcemanager_folder.myfolder.id
 }
 
 resource "yandex_vpc_subnet" "mysubnet" {
   # Создание внутренней подсети кластера и его компонентов.
-  name           = var.subnet_name
+  name           = "${var.subnet_name}"
   v4_cidr_blocks = ["192.168.10.0/27"]
   zone           = "ru-central1-a"
   network_id     = yandex_vpc_network.mynet.id
@@ -22,7 +22,7 @@ resource "yandex_vpc_subnet" "mysubnet" {
 
 resource "yandex_vpc_security_group" "sec-group" {
   # Создание группы безопасности для разграничения сетевого доступа к кластеру и его компонентам".
-  name        = var.sec-group_name
+  name        = "${var.sec-group_name}"
   description = "Правила группы разрешают подключение к сервисам из интернета."
   network_id  = yandex_vpc_network.mynet.id
   folder_id   = yandex_resourcemanager_folder.myfolder.id
@@ -60,13 +60,13 @@ resource "yandex_vpc_security_group" "sec-group" {
     from_port      = 30000
     to_port        = 32767
   }
-  ingress {
+    ingress {
     protocol       = "TCP"
     description    = "Правило разрешает входящий трафик ssh."
     v4_cidr_blocks = ["0.0.0.0/0"]
     port           = 22
   }
-  ingress {
+    ingress {
     protocol       = "TCP"
     description    = "Правило разрешает входящий трафик ssh."
     v4_cidr_blocks = ["0.0.0.0/0"]
@@ -92,7 +92,7 @@ resource "yandex_compute_disk" "disk-master" {
 
 resource "yandex_compute_instance" "master" {
   # Создание k8s-master.
-  name                      = var.master_name
+  name                      = "${var.master_name}"
   platform_id               = "standard-v1"
   zone                      = "ru-central1-a"
   allow_stopping_for_update = true
@@ -133,7 +133,7 @@ resource "yandex_compute_disk" "disk-node1" {
 
 resource "yandex_compute_instance" "node1" {
   # Создание первой ноды.
-  name                      = var.node1_name
+  name                      = "${var.node1_name}"
   platform_id               = "standard-v1"
   zone                      = "ru-central1-a"
   allow_stopping_for_update = true
@@ -174,7 +174,7 @@ resource "yandex_compute_disk" "disk-node2" {
 
 resource "yandex_compute_instance" "node2" {
   # Создание второй ноды.
-  name                      = var.node2_name
+  name                      = "${var.node2_name}"
   platform_id               = "standard-v1"
   zone                      = "ru-central1-a"
   allow_stopping_for_update = true
@@ -215,7 +215,7 @@ resource "yandex_compute_disk" "disk-vm" {
 
 resource "yandex_compute_instance" "vm" {
   # Создание виртуальной машины.
-  name                      = var.vm_name
+  name                      = "${var.vm_name}"
   platform_id               = "standard-v1"
   zone                      = "ru-central1-a"
   allow_stopping_for_update = true
@@ -256,9 +256,9 @@ resource "local_file" "ansible_inventory" {
   content = templatefile("./hosts.ini",
     {
       master = yandex_compute_instance.master.network_interface.0.nat_ip_address
-      node1  = yandex_compute_instance.node1.network_interface.0.nat_ip_address
-      node2  = yandex_compute_instance.node2.network_interface.0.nat_ip_address
-      vm     = yandex_compute_instance.vm.network_interface.0.nat_ip_address
+      node1   = yandex_compute_instance.node1.network_interface.0.nat_ip_address
+      node2   = yandex_compute_instance.node2.network_interface.0.nat_ip_address
+      vm       = yandex_compute_instance.vm.network_interface.0.nat_ip_address
   })
   filename = "./ansible-install-k8s/inventory.ini"
 }
@@ -274,9 +274,9 @@ resource "local_file" "prometheus_config" {
   content = templatefile("./prom_conf.tftpl",
     {
       master = yandex_compute_instance.master.network_interface.0.ip_address
-      node1  = yandex_compute_instance.node1.network_interface.0.ip_address
-      node2  = yandex_compute_instance.node2.network_interface.0.ip_address
-      vm     = yandex_compute_instance.vm.network_interface.0.ip_address
+      node1   = yandex_compute_instance.node1.network_interface.0.ip_address
+      node2   = yandex_compute_instance.node2.network_interface.0.ip_address
+      vm       = yandex_compute_instance.vm.network_interface.0.ip_address
   })
   filename = "./ansible-install-k8s/roles/7_prometheus-grafana/files/prometheus_main.yml"
 }
@@ -310,13 +310,7 @@ resource "terraform_data" "execute-playbook" {
   depends_on = [
     local_file.ansible_inventory
   ]
-  
-provisioner "local-exec" {
-command = "ansible-playbook -i ./ansible-install-k8s/inventory.ini --private-key ${var.private_key} ./ansible-install-k8s/ans-k8s.yaml"
-}
-}
 
-<<<<<<< HEAD
   provisioner "local-exec" {
     command = "ansible-playbook -i ./ansible-install-k8s/inventory.ini --private-key ${var.private_key} ./ansible-install-k8s/ans-k8s.yaml"
   }
@@ -324,8 +318,4 @@ command = "ansible-playbook -i ./ansible-install-k8s/inventory.ini --private-key
 
 output "public_ip_k8s-master" {
   value = [yandex_compute_instance.master.network_interface.0.nat_ip_address]
-=======
-output "public_ip_k8s-master" {
-  value = [yandex_compute_instance.master-1.network_interface.0.nat_ip_address]
->>>>>>> bebb1ea1177d83a6497f5eef0c5cf1da75001170
 }
