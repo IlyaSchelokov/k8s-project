@@ -1,26 +1,37 @@
 ---
-- name: k8s
-  hosts: master, workers
+- name: k8s-cluster
+  hosts: master, node1, node2
   become: true
-  gather_facts: yes
+  gather_facts: true
   roles:
-    - kube-prerequisites
-    - containerd
-    - kubelet-kubeadm-kubectl
-    - init-cluster
-
-- name: Install Observability stack (targets)
-  hosts: master, workers, vm
-  become: true
-  gather_facts: yes
-  roles:    
-    - node-exporter
-    
-- name: Install Observability stack (observer)
+    - 1_kube-prerequisites
+    - 2_containerd
+    - 3_kubelet-kubeadm-kubectl
+  
+- name: init-cluster
   hosts: master
   become: true
+  gather_facts: true
   roles:
-    - prometheus-grafana
+    - 4_init-cluster
+    
+- name: add workers
+  hosts: node1, node2
+  become: true
+  gather_facts: true
+  roles:
+    - 5_add-workers
 
+- name: Install node-exporter
+  hosts: master, node1, node2, vm
+  become: true
+  gather_facts: true
+  roles:
+    - 6_node-exporter
 
-
+- name: Install prometheus-grafana
+  hosts: master
+  become: true
+  gather_facts: true
+  roles:    
+    - 7_prometheus-grafana
