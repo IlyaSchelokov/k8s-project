@@ -18,7 +18,7 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
 2. Файлы *.example необходимо заполнить своими значениями, после - переименовать, убрав ".example"    
 3. Установите необходимые коллекции Ansible с помощью Ansible Galaxy CLI:
    ```bash
-   ansible-galaxy install -r ./ansible-install-k8s/requirements.yml
+   ansible-galaxy install -r ansible-install-k8s/requirements.yml
    ```
 4. Для настройки Terraform требуется указать источник, из которого будет устанавливаться провайдер
    
