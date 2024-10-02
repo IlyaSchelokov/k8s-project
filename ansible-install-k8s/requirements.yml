@@ -1,0 +1,24 @@
+collections:
+  # Install a collection from Ansible Galaxy.
+  - name: community.general
+    version: 9.4.0
+    
+  # Install a collection from Ansible Galaxy.
+  - name: kubernetes.core
+    version: 5.0.0
+    
+  # Install a collection from Ansible Galaxy.
+  - name: community.kubernetes
+    version: 2.0.1
+    
+  # Install a collection from Ansible Galaxy.
+  - name: cloud.common
+    version: 4.0.0
+    
+    
+    
+    
+ 
+ 
+ 
+ 
