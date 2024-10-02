@@ -76,16 +76,20 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
     | Название | Описание |
     | ----------- | ----------- |
     | `public_ip_k8s-master` | Публичный IP-адрес k8s-master
+    | `internal_ip_k8s-master` | Внутренний IP-адрес k8s-master
+    | `internal_ip_node1` | Внутренний IP-адрес node1
+    | `internal_ip_node2` | Внутренний IP-адрес node2
+    | `internal_ip_vm` | Внутренний IP-адрес vm
 
     </details>
 
-13. Перейдите в Grafana:
+14. Перейдите в Grafana:
     ```bash
       http://<public_ip_k8s-master>:3000
     ```
     Откройте дашборды и убедитесь, что Grafana получает метрики от кластера Kubernetes и виртуальной машины.
 
-14. Для удаления созданных ресурсов используйте:
+16. Для удаления созданных ресурсов используйте:
     ```bash
     terraform destroy
     ```
