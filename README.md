@@ -4,18 +4,10 @@
 - развернуть стек мониторинга в созданном Kubernetes кластере и настроить сбор/хранение/отображение основных метрик кластера и виртуальной машины
 
 ## Стек:
-Yandex Cloud/Kubernetes/Linux/Terraform/Prometheus/Grafana/Ansible/Docker
+Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
 
-## Начальные параметры:
-- создан аккаунт в Yandex Cloud
-- заранее создан cloud-config.yaml
-- получен OAuth токен аккаунта в Yandex Cloud
-- на рабочую машину установлены: Terraform, Ansible
-- на рабочую машину установлены коллекции Ansible:
-  - community.general
-  - kubernetes.core
-  - community.kubernetes
-  - cloud.common
+## Требования:
+- python3 v3.8.10
 
 ## Развертывание Terraform сценария
 1. Склонируйте репозиторий `IlyaSchelokov/k8s-project` из GitHub и перейдите в папку сценария `k8s-project`:
@@ -23,6 +15,10 @@ Yandex Cloud/Kubernetes/Linux/Terraform/Prometheus/Grafana/Ansible/Docker
     git clone https://github.com/IlyaSchelokov/k8s-project.git
     cd k8s-project
     ```
+2. Установите необходимые коллекции Ansible с помощью Ansible Galaxy CLI:
+   ```bash
+   ansible-galaxy install -r ./ansible-install-k8s/requirements.yml
+   ```
 2. Выполните инициализацию Terraform:
     ```bash
     terraform init
@@ -35,9 +31,9 @@ Yandex Cloud/Kubernetes/Linux/Terraform/Prometheus/Grafana/Ansible/Docker
     ```bash
     terraform plan
     ```
-5. Создайте ресурсы. На развертывание всех ресурсов в облаке потребуется около 15 мин:
+5. Создайте ресурсы. На развертывание всех ресурсов в облаке потребуется около 20 мин:
     ```bash
-    terraform apply
+    terraform apply -auto-approve
     ```
 6. После завершения процесса terraform apply в командной строке будет выведен список информации о развернутых ресурсах. В дальнейшем его можно будет посмотреть с помощью команды `terraform output`:
 
@@ -50,7 +46,12 @@ Yandex Cloud/Kubernetes/Linux/Terraform/Prometheus/Grafana/Ansible/Docker
 
     </details>
 
-7. Перейдите в Grafana по указанному выше IP адресу и порту 3000. Откройте дашборды и убедитесь, что Grafana получает метрики от кластера Kubernetes и виртуальной машины.
+7. Перейдите в Grafana:
+    ```bash
+      http://<public_ip_k8s-master>:3000
+    ```
+   Откройте дашборды и убедитесь, что Grafana получает метрики от кластера Kubernetes и виртуальной машины.
+
 8. Для удаления созданных ресурсов используйте:
     ```bash
     terraform destroy
