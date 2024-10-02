@@ -20,6 +20,10 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
    ```bash
    ssh-keygen -t ed25519
    ```
+4. Установите необходимую версию Ansible:
+   ```bash
+   pip install -r requirements.txt
+   ```
 5. Установите необходимые коллекции Ansible с помощью Ansible Galaxy CLI:
    ```bash
    ansible-galaxy install -r ansible-install-k8s/requirements.yml
