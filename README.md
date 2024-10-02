@@ -7,7 +7,7 @@
 Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
 
 ## Требования:
-- python v3.8.10
+- python 3.8.10
 
 ## Развертывание Terraform сценария
 1. Склонируйте репозиторий `IlyaSchelokov/k8s-project` из GitHub и перейдите в папку сценария `k8s-project`:
@@ -19,24 +19,46 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
 3. Установите необходимые коллекции Ansible с помощью Ansible Galaxy CLI:
    ```bash
    ansible-galaxy install -r ./ansible-install-k8s/requirements.yml
-   ```   
-4. Выполните инициализацию Terraform:
+   ```
+4. Для настройки Terraform требуется указать источник, из которого будет устанавливаться провайдер
+   
+   - перейдите в домашний каталог пользователя:
+   ```bash
+   cd /home/<имя пользователя>/
+   ```
+   - создайте файл конфигурации:
+   ```bash
+   nano ~/.terraformrc
+   ```
+   - добавьте в него следующий блок:
+   ```bash
+     provider_installation {
+    network_mirror {
+      url = "https://terraform-mirror.yandexcloud.net/"
+      include = ["registry.terraform.io/*/*"]
+    }
+    direct {
+      exclude = ["registry.terraform.io/*/*"]
+     }
+   }
+   ```      
+6. Выполните инициализацию Terraform:
     ```bash
     terraform init
-    ```
-5. Проверьте конфигурацию Terraform файлов:
+    ```    
+7. Проверьте конфигурацию Terraform файлов:
     ```bash
     terraform validate
     ```
-6. Проверьте список создаваемых облачных ресурсов:
+8. Проверьте список создаваемых облачных ресурсов:
     ```bash
     terraform plan
     ```
-7. Создайте ресурсы. На развертывание всех ресурсов в облаке потребуется около 20 мин:
+9. Создайте ресурсы. На развертывание всех ресурсов в облаке потребуется около 20 мин:
     ```bash
     terraform apply -auto-approve
     ```
-8. После завершения процесса terraform apply -auto-approve в командной строке будет выведен список информации о развернутых ресурсах. В дальнейшем его можно будет посмотреть с помощью команды `terraform output`:
+10. После завершения процесса terraform apply -auto-approve в командной строке будет выведен список информации о развернутых ресурсах. В дальнейшем его можно будет посмотреть с помощью команды `terraform output`:
 
     <details>
     <summary>Посмотреть информацию о развернутых ресурсах</summary>
@@ -47,13 +69,13 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
 
     </details>
 
-9. Перейдите в Grafana:
+11. Перейдите в Grafana:
     ```bash
       http://<public_ip_k8s-master>:3000
     ```
    Откройте дашборды и убедитесь, что Grafana получает метрики от кластера Kubernetes и виртуальной машины.
 
-10. Для удаления созданных ресурсов используйте:
+11. Для удаления созданных ресурсов используйте:
     ```bash
     terraform destroy
     ```
