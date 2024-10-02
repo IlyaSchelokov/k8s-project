@@ -8,6 +8,7 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
 
 ## Требования:
 - python 3.8.10
+- terraform 1.9.6
 
 ## Развертывание Terraform сценария
 1. Склонируйте репозиторий `IlyaSchelokov/k8s-project` из GitHub и перейдите в папку сценария `k8s-project`:
