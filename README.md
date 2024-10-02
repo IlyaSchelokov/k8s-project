@@ -87,7 +87,7 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
     ```bash
       http://<public_ip_k8s-master>:3000
     ```
-    Откройте дашборды и убедитесь, что Grafana получает метрики от внутренних IP адресов мастера и двух нод Kubernetes и виртуальной машины.
+    Откройте дашборды и убедитесь, что Grafana получает метрики от внутренних IP адресов мастера, двух нод Kubernetes и виртуальной машины.
 
 16. Для удаления созданных ресурсов используйте:
     ```bash
