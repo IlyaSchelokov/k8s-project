@@ -1,9 +1,0 @@
-#cloud-config
-users:
-  - name: ilya
-    groups: sudo
-    shell: /bin/bash
-    sudo: 'ALL=(ALL) NOPASSWD:ALL'
-    ssh_authorized_keys:
-      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINZFQBwKGskqRLLilN3Mw35mc6wLM3FcAkUGCFOH+UN9 ilya@acer
-
