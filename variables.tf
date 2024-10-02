@@ -27,3 +27,6 @@ variable "node2_name" {
 
 variable "vm_name" {
 }
+
+variable "user_name" {
+}
