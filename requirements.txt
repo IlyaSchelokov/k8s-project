@@ -1,6 +1,6 @@
-terraform v1.9.6
-ansible v2.9.6
-jinja v2.10.1
+terraform==1.9.6
+ansible==2.9.6
+jinja==2.10.1
 активный аккаунт в Yandex Cloud
 актуальный токен OAuth для аутентификации в YC
 сгенерированный для использования в cloud-init.yaml ssh ключ (ssh-keygen -t ed25519)
