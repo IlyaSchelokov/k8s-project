@@ -20,7 +20,8 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
    ```bash
    ansible-galaxy install -r ansible-install-k8s/requirements.yml
    ```
-4. Для настройки Terraform требуется указать источник, из которого будет устанавливаться провайдер
+4. Для отключения проверки по fingerprint для Ansible раскомментируйте строку #host_key_checking = False в ansible.cfg.
+5. Для настройки Terraform требуется указать источник, из которого будет устанавливаться провайдер
    
    - перейдите в домашний каталог пользователя:
    ```bash
@@ -75,7 +76,7 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
     ```
    Откройте дашборды и убедитесь, что Grafana получает метрики от кластера Kubernetes и виртуальной машины.
 
-11. Для удаления созданных ресурсов используйте:
+12. Для удаления созданных ресурсов используйте:
     ```bash
     terraform destroy
     ```
