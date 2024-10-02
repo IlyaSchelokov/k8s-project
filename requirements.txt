@@ -1,7 +1,5 @@
 terraform v1.9.6
-ansible v5.10.0
-ansible-core v2.12.10
-python3 v3.8.10
+ansible v2.9.6
 jinja v2.10.1
 активный аккаунт в Yandex Cloud
 актуальный токен OAuth для аутентификации в YC
