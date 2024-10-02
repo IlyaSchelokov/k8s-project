@@ -14,11 +14,3 @@ collections:
   # Install a collection from Ansible Galaxy.
   - name: cloud.common
     version: 4.0.0
-    
-    
-    
-    
- 
- 
- 
- 
