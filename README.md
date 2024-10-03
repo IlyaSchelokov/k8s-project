@@ -33,7 +33,7 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
    ```bash
    ansible-config init --disabled > ansible.cfg 
    ```
-7. Для отключения проверки по fingerprint для Ansible установите host_key_checking=False в ansible.cfg
+7. Для отключения проверки по fingerprint для Ansible установите ```host_key_checking=False``` в ansible.cfg
 8. Установите необходимые коллекции Ansible с помощью Ansible Galaxy CLI:
    ```bash
    ansible-galaxy install -r ansible-install-k8s/requirements.yml
