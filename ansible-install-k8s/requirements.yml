@@ -14,3 +14,11 @@ collections:
   # Install a collection from Ansible Galaxy.
   - name: cloud.common
     version: 4.0.0
+
+   # Install a collection from Ansible Galaxy.
+  - name: ansible.posix
+    version: 1.6.0
+    
+   # Install a collection from Ansible Galaxy.
+  - name: community.docker
+    version: 3.12.1
