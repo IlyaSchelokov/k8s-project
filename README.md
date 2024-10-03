@@ -44,7 +44,7 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
    
    - перейдите в домашний каталог пользователя:
    ```bash
-   cd /home/<имя пользователя>/
+   cd $HOME
    ```
    - создайте файл конфигурации:
    ```bash
