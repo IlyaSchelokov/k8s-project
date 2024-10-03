@@ -13,8 +13,7 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
 ## Развертывание Terraform сценария
 1. Склонируйте репозиторий `IlyaSchelokov/k8s-project` из GitHub и перейдите в папку сценария `k8s-project`:
     ```bash
-    git clone https://github.com/IlyaSchelokov/k8s-project.git
-    cd k8s-project
+    git clone https://github.com/IlyaSchelokov/k8s-project.git && cd k8s-project
     ```
 2. Файлы *.example необходимо заполнить своими значениями, после - переименовать, убрав ".example"
 3. Для возможности подключения к созданным ВМ необходимо сгенерировать пару ssh-ключей:
@@ -22,9 +21,9 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
    ssh-keygen -t ed25519
    ```
 4. Для исключения проблем с версионностью python и его модулей настройте виртуальную среду для данного проекта:
-   ```bash   
+   ```bash
    sudo apt install python3.8-venv && python3.8 -m venv .vevn && source .vevn/bin/activate
-   ```  
+   ```
 5. Установите необходимую версию Ansible:
    ```bash
    pip install -r requirements.txt
@@ -35,7 +34,7 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
    ```
 7. Добавьте переменную ANSIBLE_CONFIG для использования файла конфигурации Ansible из репозитория:
    ```bash
-   export ANSIBLE_CONFIG=./ansible.cfg 
+   export ANSIBLE_CONFIG=./ansible.cfg
    ```
 8. Установите необходимые коллекции Ansible с помощью Ansible Galaxy CLI:
    ```bash
@@ -62,11 +61,11 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
       exclude = ["registry.terraform.io/*/*"]
      }
    }
-   ```      
+   ```
 10. Вернитесь в каталог k8s-project и выполните инициализацию Terraform:
     ```bash
     terraform init
-    ```    
+    ```
 11. Проверьте конфигурацию Terraform файлов:
     ```bash
     terraform validate
