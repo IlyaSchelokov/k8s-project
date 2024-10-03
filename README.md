@@ -60,7 +60,7 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
      }
    }
    ```      
-10. Выполните инициализацию Terraform:
+10. Вернитесь в каталог k8s-project и выполните инициализацию Terraform:
     ```bash
     terraform init
     ```    
