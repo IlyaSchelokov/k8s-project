@@ -20,27 +20,23 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
    ```bash
    ssh-keygen -t ed25519
    ```
-4. Для исключения проблем с версионностью python и его модулей настройте виртуальную среду для данного проекта:
+4. Установите необходимые модули для python, а для исключения проблем с версионностью python и его модулей настройте виртуальную среду для данного проекта:
    ```bash
-   sudo apt install python3.8-venv && python3.8 -m venv .vevn && source .vevn/bin/activate
+   sudo apt install python3-pip && apt install python3.8-venv && python3.8 -m venv .vevn && source .vevn/bin/activate
    ```
-5. Установите необходимую версию Ansible:
+5. Создайте softlink исполняемого файла terraform в созданную виртуальную среду и измените права для текущего пользователя:
+    ```bash
+    ln -s <путь_до_исполняемого_файла_terraform>/terraform terraform && sudo chown $USERNAME:$USERNAME terraform
+    ```
+6. Установите необходимую версию Ansible:
    ```bash
    pip install -r requirements.txt
    ```
-6. Добавьте в PATH директорию с Ansible:
-   ```bash
-   export PATH=$PATH:/home/<имя_пользователя>/.local/bin
-   ```
-7. Добавьте переменную ANSIBLE_CONFIG для использования файла конфигурации Ansible из репозитория:
-   ```bash
-   export ANSIBLE_CONFIG=./ansible.cfg
-   ```
-8. Установите необходимые коллекции Ansible с помощью Ansible Galaxy CLI:
+7. Установите необходимые коллекции Ansible с помощью Ansible Galaxy CLI:
    ```bash
    ansible-galaxy install -r ansible-install-k8s/requirements.yml
    ```
-9. Для настройки Terraform требуется указать источник, из которого будет устанавливаться провайдер
+8. Для настройки Terraform требуется указать источник, из которого будет устанавливаться провайдер
    
    - перейдите в домашний каталог пользователя:
    ```bash
@@ -62,23 +58,23 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
      }
    }
    ```
-10. Вернитесь в каталог k8s-project и выполните инициализацию Terraform:
+9. Вернитесь в каталог k8s-project и выполните инициализацию Terraform:
     ```bash
-    terraform init
+    cd $OLDPWD && terraform init
     ```
-11. Проверьте конфигурацию Terraform файлов:
+10. Проверьте конфигурацию Terraform файлов:
     ```bash
     terraform validate
     ```
-12. Проверьте список создаваемых облачных ресурсов:
+11. Проверьте список создаваемых облачных ресурсов:
     ```bash
     terraform plan
     ```
-13. Создайте ресурсы. На развертывание всех ресурсов в облаке потребуется около 20 мин:
+12. Создайте ресурсы. На развертывание всех ресурсов в облаке потребуется около 20 мин:
     ```bash
     terraform apply -auto-approve
     ```
-14. После завершения процесса terraform apply -auto-approve в командной строке будет выведен список информации о развернутых ресурсах. В дальнейшем его можно будет посмотреть с помощью команды `terraform output`:
+13. После завершения процесса terraform apply -auto-approve в командной строке будет выведен список информации о развернутых ресурсах. В дальнейшем его можно будет посмотреть с помощью команды `terraform output`:
 
     <details>
     <summary>Посмотреть информацию о развернутых ресурсах</summary>
@@ -93,13 +89,13 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
 
     </details>
 
-15. Выполните вход в Grafana:
+14. Выполните вход в Grafana:
     ```bash
       http://<public_ip_k8s-master>:3000
     ```
     после перейдите в Dashboards, далее - в каталог main и выберите дашборд Node Exporter Full. Убедитесь, что Grafana получает метрики от внутренних IP адресов мастера, двух нод Kubernetes и виртуальной машины.
 
-16. Для удаления созданных ресурсов используйте:
+15. Для удаления созданных ресурсов используйте:
     ```bash
     terraform destroy
     ```
