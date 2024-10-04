@@ -1,4 +1,5 @@
 # exclude files
+terraform
 .terraform.tfvars
 .terraform/*
 *.tfstate*
