@@ -11,10 +11,28 @@ resource "yandex_vpc_network" "mynet" {
   folder_id = yandex_resourcemanager_folder.myfolder.id
 }
 
-resource "yandex_vpc_subnet" "mysubnet" {
+resource "yandex_vpc_subnet" "mysubnet1" {
   # Создание внутренней подсети кластера и его компонентов.
   name           = var.subnet_name
   v4_cidr_blocks = ["192.168.10.0/27"]
+  zone           = "ru-central1-a"
+  network_id     = yandex_vpc_network.mynet.id
+  folder_id      = yandex_resourcemanager_folder.myfolder.id
+}
+
+resource "yandex_vpc_subnet" "mysubnet2" {
+  # Создание внутренней подсети кластера и его компонентов.
+  name           = "for_pods"
+  v4_cidr_blocks = ["10.112.0.0/16"]
+  zone           = "ru-central1-a"
+  network_id     = yandex_vpc_network.mynet.id
+  folder_id      = yandex_resourcemanager_folder.myfolder.id
+}
+
+resource "yandex_vpc_subnet" "mysubnet3" {
+  # Создание внутренней подсети кластера и его компонентов.
+  name           = "for_services"
+  v4_cidr_blocks = ["10.96.0.0/16"]
   zone           = "ru-central1-a"
   network_id     = yandex_vpc_network.mynet.id
   folder_id      = yandex_resourcemanager_folder.myfolder.id
@@ -29,7 +47,7 @@ resource "yandex_vpc_security_group" "sec-group" {
 
   ingress {
     protocol          = "TCP"
-    description       = "Правило разрешает проверки доступности с диапазона адресов балансировщика нагрузки. Нужно для работы отказоустойчивого кластера и сервисов балансировщика."
+    description       = "Правило разрешает проверки доступности с диапазона адресов балансировщика нагрузки. Нужно для работы отказоустойчивого кластера Managed Service for Kubernetes и сервисов балансировщика."
     predefined_target = "loadbalancer_healthchecks"
     from_port         = 0
     to_port           = 65535
@@ -43,8 +61,8 @@ resource "yandex_vpc_security_group" "sec-group" {
   }
   ingress {
     protocol       = "ANY"
-    description    = "Правило разрешает взаимодействие под-под и сервис-сервис."
-    v4_cidr_blocks = concat(yandex_vpc_subnet.mysubnet.v4_cidr_blocks)
+    description    = "Правило разрешает взаимодействие под-под и сервис-сервис. Укажите подсети вашего кластера Managed Service for Kubernetes и сервисов."
+    v4_cidr_blocks = concat(yandex_vpc_subnet.mysubnet1.v4_cidr_blocks)
     from_port      = 0
     to_port        = 65535
   }
@@ -55,10 +73,17 @@ resource "yandex_vpc_security_group" "sec-group" {
   }
   ingress {
     protocol       = "TCP"
-    description    = "Правило разрешает входящий трафик из интернета на диапазон портов NodePort."
+    description    = "Правило разрешает входящий трафик из интернета на диапазон портов NodePort. Добавьте или измените порты на нужные вам."
     v4_cidr_blocks = ["0.0.0.0/0"]
     from_port      = 30000
     to_port        = 32767
+  }
+  egress {
+    protocol       = "ANY"
+    description    = "Правило разрешает весь исходящий трафик. Узлы могут связаться с Yandex Container Registry, Yandex Object Storage, Docker Hub и т. д."
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    from_port      = 0
+    to_port        = 65535
   }
   ingress {
     protocol       = "TCP"
@@ -68,7 +93,7 @@ resource "yandex_vpc_security_group" "sec-group" {
   }
   ingress {
     protocol       = "TCP"
-    description    = "Правило разрешает входящий трафик ssh."
+    description    = "Правило разрешает 3000 port."
     v4_cidr_blocks = ["0.0.0.0/0"]
     port           = 3000
   }
@@ -93,6 +118,7 @@ resource "yandex_compute_disk" "disk-master" {
 resource "yandex_compute_instance" "master" {
   # Создание k8s-master.
   name                      = var.master_name
+  hostname                  = "master.test.internal"
   platform_id               = "standard-v1"
   zone                      = "ru-central1-a"
   allow_stopping_for_update = true
@@ -109,7 +135,7 @@ resource "yandex_compute_instance" "master" {
 
   network_interface {
     nat                = true # Создание внешнего IP ВМ.
-    subnet_id          = yandex_vpc_subnet.mysubnet.id
+    subnet_id          = yandex_vpc_subnet.mysubnet1.id
     security_group_ids = [yandex_vpc_security_group.sec-group.id]
   }
 
@@ -134,6 +160,7 @@ resource "yandex_compute_disk" "disk-node1" {
 resource "yandex_compute_instance" "node1" {
   # Создание первой ноды.
   name                      = var.node1_name
+  hostname                  = "node1.test.internal"
   platform_id               = "standard-v1"
   zone                      = "ru-central1-a"
   allow_stopping_for_update = true
@@ -150,7 +177,7 @@ resource "yandex_compute_instance" "node1" {
 
   network_interface {
     nat                = true # Создание внешнего IP ВМ.
-    subnet_id          = yandex_vpc_subnet.mysubnet.id
+    subnet_id          = yandex_vpc_subnet.mysubnet1.id
     security_group_ids = [yandex_vpc_security_group.sec-group.id]
   }
 
@@ -175,6 +202,7 @@ resource "yandex_compute_disk" "disk-node2" {
 resource "yandex_compute_instance" "node2" {
   # Создание второй ноды.
   name                      = var.node2_name
+  hostname                  = "node2.test.internal"
   platform_id               = "standard-v1"
   zone                      = "ru-central1-a"
   allow_stopping_for_update = true
@@ -191,7 +219,7 @@ resource "yandex_compute_instance" "node2" {
 
   network_interface {
     nat                = true # Создание внешнего IP ВМ.
-    subnet_id          = yandex_vpc_subnet.mysubnet.id
+    subnet_id          = yandex_vpc_subnet.mysubnet1.id
     security_group_ids = [yandex_vpc_security_group.sec-group.id]
   }
 
@@ -232,7 +260,7 @@ resource "yandex_compute_instance" "vm" {
 
   network_interface {
     nat                = true # Создание внешнего IP ВМ.
-    subnet_id          = yandex_vpc_subnet.mysubnet.id
+    subnet_id          = yandex_vpc_subnet.mysubnet1.id
     security_group_ids = [yandex_vpc_security_group.sec-group.id]
   }
 
@@ -293,7 +321,6 @@ resource "local_file" "grafana_config" {
   filename = "./ansible-install-k8s/roles/7_prometheus-grafana/files/grafana/provisioning/datasources/all.yml"
 }
 
-
 # Проверка соединения для последующего выполнения плейбука
 resource "terraform_data" "execute-playbook" {
   provisioner "remote-exec" {
@@ -301,7 +328,7 @@ resource "terraform_data" "execute-playbook" {
     connection {
       type        = "ssh"
       host        = yandex_compute_instance.master.network_interface.0.nat_ip_address
-      user        = "${var.user_name}"
+      user        = var.user_name
       agent       = false
       private_key = file(var.private_key)
     }
