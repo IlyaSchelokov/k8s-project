@@ -22,16 +22,16 @@
   roles:
     - 5_add-workers
 
-- name: Install node-exporter
-  hosts: master, node1, node2, vm
-  become: true
-  gather_facts: true
-  roles:
-    - 6_node-exporter
+#- name: Install node-exporter
+#  hosts: master, node1, node2, vm
+#  become: true
+#  gather_facts: true
+#  roles:
+#    - 6_node-exporter
 
-- name: Install prometheus-grafana
-  hosts: master
-  become: true
-  gather_facts: true
-  roles:    
-    - 7_prometheus-grafana
+#- name: Install prometheus-grafana
+#  hosts: master
+#  become: true
+#  gather_facts: true
+#  roles:    
+#    - 7_prometheus-grafana
