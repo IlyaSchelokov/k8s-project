@@ -22,16 +22,23 @@
   roles:
     - 5_add-workers
 
-#- name: Install node-exporter
-#  hosts: master, node1, node2, vm
-#  become: true
-#  gather_facts: true
-#  roles:
-#    - 6_node-exporter
+- name: Install helm
+  hosts: master
+  become: true
+  gather_facts: true
+  roles:
+    - 6_install-helm
 
-#- name: Install prometheus-grafana
-#  hosts: master
-#  become: true
-#  gather_facts: true
-#  roles:    
-#    - 7_prometheus-grafana
+- name: Install kube-prometheus-stack
+  hosts: master
+  become: true
+  gather_facts: true
+  roles:    
+    - 7_helm-install-kube-prom-stack
+    
+- name: Install ingress-nginx
+  hosts: master
+  become: true
+  gather_facts: true
+  roles:    
+    - 8_helm-install-ingress-nginx
