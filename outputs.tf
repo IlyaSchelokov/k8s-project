@@ -17,3 +17,7 @@ output "internal_ip_node2" {
 output "internal_ip_vm" {
   value = [yandex_compute_instance.vm.network_interface.0.ip_address]
 }
+
+output "load_balancer_public_ip" {
+  value = yandex_lb_network_load_balancer.grafana.listener.*.external_address_spec[0].*.address
+}
