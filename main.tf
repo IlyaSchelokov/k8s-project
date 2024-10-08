@@ -292,7 +292,7 @@ resource "yandex_lb_network_load_balancer" "grafana" {
   listener {
     name        = "grafana"
     port        = 3000
-    target_port = 30000
+    target_port = 33333
     protocol    = "tcp"
     external_address_spec {
       ip_version = "ipv4"
