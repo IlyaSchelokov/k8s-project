@@ -1,0 +1,3 @@
+tcp: {3000: "monitoring/kube-prometheus-stack-grafana:80"}
+portNamePrefix: "graf"
+nodePorts: {tcp: "3000: 33333"}
