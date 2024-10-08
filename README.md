@@ -30,7 +30,7 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
    ```
 6. Создайте softlink исполняемого файла terraform в созданную виртуальную среду и измените права для текущего пользователя:
     ```bash
-    ln -s <путь_до_исполняемого_файла_terraform>/terraform terraform && sudo chown $USERNAME:$USERNAME terraform
+    ln -s /usr/local/bin/terraform && sudo chown $USERNAME:$USERNAME terraform
     ```
 7. Установите необходимую версию Ansible:
    ```bash
