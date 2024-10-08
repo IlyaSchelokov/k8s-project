@@ -10,7 +10,13 @@ variable "folder_name" {
 variable "net_name" {
 }
 
-variable "subnet_name" {
+variable "subnet_name_basic" {
+}
+
+variable "subnet_name_for_pods" {
+}
+
+variable "subnet_name_for_services" {
 }
 
 variable "sec-group_name" {
