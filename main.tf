@@ -13,7 +13,7 @@ resource "yandex_vpc_network" "mynet" {
 
 resource "yandex_vpc_subnet" "mysubnet1" {
   # Создание внутренней подсети кластера и его компонентов.
-  name           = var.subnet_name
+  name           = var.subnet_name_basic
   v4_cidr_blocks = ["192.168.10.0/27"]
   zone           = "ru-central1-a"
   network_id     = yandex_vpc_network.mynet.id
@@ -22,7 +22,7 @@ resource "yandex_vpc_subnet" "mysubnet1" {
 
 resource "yandex_vpc_subnet" "mysubnet2" {
   # Создание внутренней подсети кластера и его компонентов.
-  name           = "for_pods"
+  name           = var.subnet_name_for_pods
   v4_cidr_blocks = ["10.112.0.0/16"]
   zone           = "ru-central1-a"
   network_id     = yandex_vpc_network.mynet.id
@@ -31,7 +31,7 @@ resource "yandex_vpc_subnet" "mysubnet2" {
 
 resource "yandex_vpc_subnet" "mysubnet3" {
   # Создание внутренней подсети кластера и его компонентов.
-  name           = "for_services"
+  name           = var.subnet_name_for_services
   v4_cidr_blocks = ["10.96.0.0/16"]
   zone           = "ru-central1-a"
   network_id     = yandex_vpc_network.mynet.id
@@ -270,6 +270,46 @@ resource "yandex_compute_instance" "vm" {
 
   labels = {
     "template-label1" = "vm"
+  }
+}
+
+resource "yandex_lb_target_group" "grafana" {
+  name      = "grafana"
+  folder_id = yandex_resourcemanager_folder.myfolder.id
+  target {
+    subnet_id = "${yandex_vpc_subnet.mysubnet1.id}"
+    address   = "${yandex_compute_instance.node1.network_interface.0.ip_address}"
+  }
+  target {
+    subnet_id = "${yandex_vpc_subnet.mysubnet1.id}"
+    address   = "${yandex_compute_instance.node2.network_interface.0.ip_address}"
+  }
+}
+
+resource "yandex_lb_network_load_balancer" "grafana" {
+  name = "grafana"
+  folder_id = yandex_resourcemanager_folder.myfolder.id
+  listener {
+    name        = "grafana"
+    port        = 3000
+    target_port = 30000
+    protocol    = "tcp"
+    external_address_spec {
+      ip_version = "ipv4"
+    }
+  }
+  attached_target_group {
+    target_group_id = "${yandex_lb_target_group.grafana.id}"
+    healthcheck {
+      name                = "tcp"
+      interval            = 2
+      timeout             = 1
+      unhealthy_threshold = 2
+      healthy_threshold   = 2
+      tcp_options {
+        port = 22
+      }
+    }
   }
 }
 
