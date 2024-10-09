@@ -3,6 +3,11 @@
   kubernetes.core.helm_repository:
     name: prometheus-community
     repo_url: "https://prometheus-community.github.io/helm-charts"
+
+- name: Copy values.yaml
+  ansible.builtin.copy:
+    src: ../files/values.yaml
+    dest: $PWD/values.yaml
     
 - name: Deploy kps version 65.1.1 inside monitoring namespace (and create it)
   kubernetes.core.helm:
@@ -12,3 +17,5 @@
     chart_version: 65.1.1
     release_namespace: monitoring
     create_namespace: true
+    values_files:
+      - /home/ilya/values.yaml
