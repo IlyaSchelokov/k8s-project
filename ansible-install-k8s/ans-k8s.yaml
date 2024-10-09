@@ -35,10 +35,3 @@
   gather_facts: true
   roles:    
     - 7_helm-install-kube-prom-stack
-    
-- name: Install ingress-nginx
-  hosts: master
-  become: true
-  gather_facts: true
-  roles:    
-    - 8_helm-install-ingress-nginx
