@@ -331,6 +331,18 @@ resource "local_file" "ansible_inventory" {
   filename = "./ansible-install-k8s/inventory.ini"
 }
 
+# Создание scrapeconfig
+resource "local_file" "scrape_config" {
+  depends_on = [
+    yandex_compute_instance.vm
+  ]
+  content = templatefile("./templates/scrapeconfig.tftpl",
+    {
+      vm     = yandex_compute_instance.vm.network_interface.0.nat_ip_address
+  })
+  filename = "./ansible-install-k8s/roles/9_install-scrapeconfig/files/scrapeconfig.yaml"
+}
+
 # Проверка соединения для последующего выполнения плейбука
 resource "terraform_data" "execute-playbook" {
   provisioner "remote-exec" {
