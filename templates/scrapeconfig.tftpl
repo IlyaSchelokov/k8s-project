@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: node-exporter
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  staticConfigs:
+    - labels:
+        job: node-exporter
+      targets:
+        - ${vm}:9100
