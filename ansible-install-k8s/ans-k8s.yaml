@@ -43,7 +43,7 @@
   roles:    
     - 8_install-node-exporter
     
-- name: Install node-exporter
+- name: Install scrapeconfig
   hosts: master
   become: true
   gather_facts: true
