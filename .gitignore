@@ -5,3 +5,4 @@ terraform
 *.tfstate*
 *.lock*
 .venv/*
+cloud-config.yaml
