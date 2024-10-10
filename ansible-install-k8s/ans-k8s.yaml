@@ -42,3 +42,10 @@
   gather_facts: true
   roles:    
     - 8_install-node-exporter
+    
+- name: Install node-exporter
+  hosts: master
+  become: true
+  gather_facts: true
+  roles:    
+    - 9_install-scrapeconfig
