@@ -101,7 +101,9 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
     Логин: admin
     Пароль: prom-operator
     ```
-    после перейдите в Dashboards. Убедитесь в наличии дашбордов для мониторинга кластера (Kubernetes /*) и виртуальной машины (Node Exporter / Nodes) и откройте их.
+    после перейдите в Dashboards. 
+    Убедитесь в наличии дашбордов для мониторинга кластера (Kubernetes /*) и виртуальной машины (Node Exporter / Nodes), откройте их. Используйте таблицу из п.14 для определения внутреннего IP-
+    адреса виртуальной машины.
 
 17. Для удаления созданных ресурсов используйте:
     ```bash
