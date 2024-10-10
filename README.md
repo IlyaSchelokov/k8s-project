@@ -99,8 +99,8 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
     http://<load_balancer_public_ip>:3000
     ```
     ```bash
-    Логин admin
-    Пароль prom-operator
+    Логин: admin
+    Пароль: prom-operator
     ```
     после перейдите в Dashboards. Убедитесь в наличии шаблонов для мониторинга кластера и виртуальной машины и откройте интересующий Dashboard.
 
