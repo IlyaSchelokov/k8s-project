@@ -338,7 +338,7 @@ resource "local_file" "scrape_config" {
   ]
   content = templatefile("./templates/scrapeconfig.tftpl",
     {
-      vm     = yandex_compute_instance.vm.network_interface.0.nat_ip_address
+      vm = yandex_compute_instance.vm.network_interface.0.ip_address
   })
   filename = "./ansible-install-k8s/roles/9_install-scrapeconfig/files/scrapeconfig.yaml"
 }
