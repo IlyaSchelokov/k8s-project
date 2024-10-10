@@ -331,36 +331,6 @@ resource "local_file" "ansible_inventory" {
   filename = "./ansible-install-k8s/inventory.ini"
 }
 
-# Создание prometheus config
-resource "local_file" "prometheus_config" {
-  depends_on = [
-    yandex_compute_instance.master,
-    yandex_compute_instance.node1,
-    yandex_compute_instance.node2,
-    yandex_compute_instance.vm
-  ]
-  content = templatefile("./templates/prom_conf.tftpl",
-    {
-      master = yandex_compute_instance.master.network_interface.0.ip_address
-      node1  = yandex_compute_instance.node1.network_interface.0.ip_address
-      node2  = yandex_compute_instance.node2.network_interface.0.ip_address
-      vm     = yandex_compute_instance.vm.network_interface.0.ip_address
-  })
-  filename = "./ansible-install-k8s/roles/7_prometheus-grafana/files/prometheus_main.yml"
-}
-
-# Создание grafana config
-resource "local_file" "grafana_config" {
-  depends_on = [
-    yandex_compute_instance.master
-  ]
-  content = templatefile("./templates/graf_conf.tftpl",
-    {
-      master = yandex_compute_instance.master.network_interface.0.ip_address
-  })
-  filename = "./ansible-install-k8s/roles/7_prometheus-grafana/files/grafana/provisioning/datasources/all.yml"
-}
-
 # Проверка соединения для последующего выполнения плейбука
 resource "terraform_data" "execute-playbook" {
   provisioner "remote-exec" {
