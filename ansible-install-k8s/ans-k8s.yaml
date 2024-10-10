@@ -35,3 +35,10 @@
   gather_facts: true
   roles:    
     - 7_helm-install-kube-prom-stack
+    
+- name: Install node-exporter
+  hosts: vm
+  become: true
+  gather_facts: true
+  roles:    
+    - 8_install-node-exporter
