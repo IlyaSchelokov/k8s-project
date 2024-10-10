@@ -85,6 +85,7 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
 
     | Название | Описание |
     | ----------- | ----------- |
+    | `load_balancer_public_ip` | Публичный IP-адрес сетевого балансировщика
     | `public_ip_k8s-master` | Публичный IP-адрес k8s-master
     | `internal_ip_k8s-master` | Внутренний IP-адрес k8s-master
     | `internal_ip_node1` | Внутренний IP-адрес node1
@@ -93,13 +94,17 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
 
     </details>
 
-15. Выполните вход в Grafana:
+16. Выполните вход в Grafana:
     ```bash
-      http://<public_ip_k8s-master>:3000
+    http://<load_balancer_public_ip>:3000
     ```
-    после перейдите в Dashboards, далее - в каталог main и выберите дашборд Node Exporter Full. Убедитесь, что Grafana получает метрики от внутренних IP адресов мастера, двух нод Kubernetes и виртуальной машины.
+    ```bash
+    Логин admin
+    Пароль prom-operator
+    ```
+    после перейдите в Dashboards. Убедитесь в наличии шаблонов для мониторинга кластера и виртуальной машины и откройте интересующий Dashboard.
 
-16. Для удаления созданных ресурсов используйте:
+17. Для удаления созданных ресурсов используйте:
     ```bash
     terraform destroy
     ```
