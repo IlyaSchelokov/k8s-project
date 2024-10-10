@@ -3137,7 +3137,7 @@ prometheus:
 
     ## Service type
     ##
-    type: ClusterIP
+    type: NodePort
 
     ## Additional ports to open for Prometheus service
     ##
@@ -3702,11 +3702,11 @@ prometheus:
     ## scrapeConfigs to be selected for target discovery.
     ## If {}, select all scrapeConfigs
     ##
-    scrapeConfigSelector: {}
+    
     ## Example which selects scrapeConfigs with label "prometheus" set to "somelabel"
-    # scrapeConfigSelector:
-    #   matchLabels:
-    #     prometheus: somelabel
+    scrapeConfigSelector:
+      matchLabels:
+        release:  kube-prometheus-stack
 
     ## If nil, select own namespace. Namespaces to be selected for scrapeConfig discovery.
     scrapeConfigNamespaceSelector: {}
