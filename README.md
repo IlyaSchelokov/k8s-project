@@ -86,7 +86,6 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
     | Название | Описание |
     | ----------- | ----------- |
     | `load_balancer_public_ip` | Публичный IP-адрес сетевого балансировщика
-    | `public_ip_k8s-master` | Публичный IP-адрес k8s-master
     | `internal_ip_k8s-master` | Внутренний IP-адрес k8s-master
     | `internal_ip_node1` | Внутренний IP-адрес node1
     | `internal_ip_node2` | Внутренний IP-адрес node2
@@ -102,7 +101,7 @@ Yandex Cloud/Kubernetes/Ubuntu/Terraform/Prometheus/Grafana/Ansible/Docker
     Логин: admin
     Пароль: prom-operator
     ```
-    после перейдите в Dashboards. Убедитесь в наличии шаблонов для мониторинга кластера и виртуальной машины и откройте интересующий Dashboard.
+    после перейдите в Dashboards. Убедитесь в наличии дашбордов для мониторинга кластера (Kubernetes /*) и виртуальной машины (Node Exporter / Nodes) и откройте их.
 
 17. Для удаления созданных ресурсов используйте:
     ```bash
