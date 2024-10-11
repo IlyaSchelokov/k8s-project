@@ -6,3 +6,6 @@ terraform
 *.lock*
 .venv/*
 cloud-config.yaml
+/ansible-install-k8s/inventory.ini
+/ansible-install-k8s/roles/9_install-scrapeconfig/files/*
+/ansible-install-k8s/buffer/*
