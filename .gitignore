@@ -1,6 +1,6 @@
 # exclude files
 terraform
-.terraform.tfvars
+terraform.tfvars
 .terraform/*
 *.tfstate*
 *.lock*
@@ -9,3 +9,4 @@ cloud-config.yaml
 /ansible-install-k8s/inventory.ini
 /ansible-install-k8s/roles/9_install-scrapeconfig/files/*
 /ansible-install-k8s/buffer/*
+locals.tf
