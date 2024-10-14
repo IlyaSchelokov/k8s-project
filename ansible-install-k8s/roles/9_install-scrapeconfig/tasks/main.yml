@@ -2,9 +2,9 @@
 - name: Copy values.yaml
   ansible.builtin.copy:
     src: ../files/scrapeconfig.yaml
-    dest: $PWD/scrapeconfig.yaml
+    dest: /tmp/scrapeconfig.yaml
 
 - name: Create a ScrapeConfig from a local file
   kubernetes.core.k8s:
     state: present
-    src: /home/ilya/scrapeconfig.yaml
+    src: /tmp/scrapeconfig.yaml
