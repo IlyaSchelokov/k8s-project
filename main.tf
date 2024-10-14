@@ -361,6 +361,6 @@ resource "terraform_data" "execute-playbook" {
   ]
 
   provisioner "local-exec" {
-    command = "ansible-playbook -i ./ansible-install-k8s/inventory.ini --private-key ${var.private_key} ./ansible-install-k8s/ans-k8s.yaml"
+    command = "ansible-playbook -i ./ansible-install-k8s/inventory.ini -u ${var.user_name} --private-key ${var.private_key} ./ansible-install-k8s/ans-k8s.yaml"
   }
 }
