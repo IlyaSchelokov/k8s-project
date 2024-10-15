@@ -11,12 +11,20 @@
     state: present
     filename: 'kubernetes'
 
+- name: Update APT Cache
+  apt:
+    update_cache: yes
+
+- name: Remove apt lock-frontend file
+  file:
+    state: absent
+    path: "/var/lib/dpkg/lock-frontend"
+
 - name: install Kubelet
   become: true
   apt:
     name: kubelet=1.28.*
     state: present
-    update_cache: true
 
 - name: install Kubeadm
   become: true
