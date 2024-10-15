@@ -8,27 +8,15 @@
     - lsb-release
     - apt-transport-https
     state: latest
-    update_cache: true
-
-- name: create keyrings directory
-  file:
-    path: /etc/apt/keyrings
-    state: directory
-    mode: 0755
-
-- name: Add Docker GPG key
-  apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-
-- name: Add Docker APT repository
-  apt_repository:
-    repo: deb [arch=amd64] https://download.docker.com/{{ ansible_system | lower }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
+    update_cache: yes
+    cache_valid_time: 3600
 
 - name: install containerd
   apt:
     name: containerd.io
     state: present
     update_cache: yes
+    cache_valid_time: 3600
 
 - name: Apply the default configuration for the containerd
   shell: | 
